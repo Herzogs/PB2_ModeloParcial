@@ -24,7 +24,7 @@ public class Avengers {
 
     public Boolean agregarPersonaje(Personaje per) {
         Boolean est = false;
-        if(!this.listaDePersonajes.contains(per)) {
+        if (!this.listaDePersonajes.contains(per)) {
             this.listaDePersonajes.add(per);
             est = true;
         }
@@ -33,16 +33,16 @@ public class Avengers {
 
     public Boolean agregarGema(Gema gema) {
         Boolean est = false;
-        if(!this.listaDeGemas.contains(gema)) {
+        if (!this.listaDeGemas.contains(gema)) {
             this.listaDeGemas.add(gema);
             est = true;
         }
         return est;
     }
 
-    public Boolean asginarGema (Personaje p, Gema g){
+    public Boolean asginarGema(Personaje p, Gema g) {
         Boolean est = false;
-        if(!this.listaDeGemas.contains(g)&&!this.listaDePersonajes.contains(p)){
+        if (!this.listaDeGemas.contains(g) && !this.listaDePersonajes.contains(p)) {
             p.setGema(g);
             this.listaDePersonajes.add(p);
             est = true;
@@ -50,57 +50,83 @@ public class Avengers {
         return est;
     }
 
+    private void asignarGemaAHeroe(Gema gem) {
+        Boolean est = false;
+        do {
+            Integer val = (int) (Math.random() * 6);
+            Personaje aux = this.listaDePersonajes.get(val);
+            if (aux instanceof Heroe && aux.getGema() == null) {
+                aux.setGema(gem);
+                est = true;
+            }
+        } while (!est);
+    }
+
+    private void asignarGemaAVillano(Gema gem) {
+        Boolean est = false;
+        do {
+            Integer val = (int) (Math.random() * 6);
+            Personaje aux = this.listaDePersonajes.get(val);
+            if ((aux instanceof Villano) && aux.getGema() == null) {
+                aux.setGema(gem);
+                est = true;
+            }
+        } while (!est);
+    }
+
     public void asignarGemas() {
-        this.listaDePersonajes.get(0).setGema(this.listaDeGemas.get(0));
-        this.listaDePersonajes.get(1).setGema(this.listaDeGemas.get(1));
-        this.listaDePersonajes.get(2).setGema(this.listaDeGemas.get(2));
-        this.listaDePersonajes.get(3).setGema(this.listaDeGemas.get(3));
-        this.listaDePersonajes.get(4).setGema(this.listaDeGemas.get(4));
-        this.listaDePersonajes.get(5).setGema(this.listaDeGemas.get(5));
+        for (Integer i = 0; i < this.listaDeGemas.size(); i++) {
+            if (i % 2 == 0) {
+                this.asignarGemaAHeroe(this.listaDeGemas.get(i));
+            } else {
+                this.asignarGemaAVillano(this.listaDeGemas.get(i));
+            }
+        }
     }
 
-    private Personaje obtenerHeroeDisponible(){
+
+    private Personaje obtenerHeroeDisponible() {
         Boolean est = false;
         Personaje per = null;
         for (int i = 0; i < this.listaDePersonajes.size() && !est; i++) {
             per = this.listaDePersonajes.get(i);
-            if((per instanceof Heroe) && per.getLucho().equals(false)){
+            if ((per instanceof Heroe) && per.getLucho().equals(false)) {
                 est = true;
                 per.setLucho(true);
             }
         }
-        return est?per:null;
+        return est ? per : null;
     }
 
-    private Personaje obtenerVillanoDisponible(){
+    private Personaje obtenerVillanoDisponible() {
         Boolean est = false;
         Personaje per = null;
         for (int i = 0; i < this.listaDePersonajes.size() && !est; i++) {
             per = this.listaDePersonajes.get(i);
-            if((per instanceof Villano) && per.getLucho().equals(false)){
+            if ((per instanceof Villano) && per.getLucho().equals(false)) {
                 est = true;
                 per.setLucho(true);
             }
         }
-        return est?per:null;
+        return est ? per : null;
     }
 
-    public Boolean batallaFinal() throws WorldDestroyerException{
+    public Boolean batallaFinal() throws WorldDestroyerException {
         Personaje per1 = this.obtenerHeroeDisponible();
         Personaje per2 = this.obtenerVillanoDisponible();
         Boolean est = false;
-        while(per1 != null && per2 != null){
-            ((Heroe)per1).aumentarPoder();
-            ((Villano)per2).aumentarPoder();
-            if(((Heroe)per1).getPoder() > ((Villano)per2).getPoder()){
+        while (per1 != null && per2 != null) {
+            ((Heroe) per1).aumentarPoder();
+            ((Villano) per2).aumentarPoder();
+            if (((Heroe) per1).getPoder() > ((Villano) per2).getPoder()) {
                 this.listaDeHeroesGanadores.add(per1);
-                if(per2.getGema() != null){
+                if (per2.getGema() != null) {
                     this.cantGemas++;
                 }
-            }else{
+            } else {
                 this.listaDeVillanosGanadores.add(per2);
                 if (per1.getGema() != null) {
-                    this.cantGemas --;
+                    this.cantGemas--;
                 }
             }
             per1 = this.obtenerHeroeDisponible();
@@ -129,7 +155,7 @@ public class Avengers {
         return listaDePersonajes;
     }
 
-    public Personaje getPersonajexIND(Integer ind){
+    public Personaje getPersonajexIND(Integer ind) {
         return this.listaDePersonajes.get(ind);
     }
 }
