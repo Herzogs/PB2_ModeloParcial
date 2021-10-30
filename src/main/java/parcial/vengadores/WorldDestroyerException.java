@@ -4,7 +4,7 @@ public class WorldDestroyerException extends Exception{
 
     private String msg;
 
-    public WorldDestroyerException(String message) {
+    public WorldDestroyerException(String msg) {
         this.msg = msg;
     }
 
